@@ -1,6 +1,11 @@
 import collections
 import sys
 import random
+import sched
+import time
+import os
+import msvcrt
+
 
 class Board:
 
@@ -83,6 +88,15 @@ class Game:
 		self.board = Board()
 		self.possible_pieces = ["I", "T"]
 		self.curr_piece = self.get_piece()
+		self.tick_scheduler =  sched.scheduler(time.time, time.sleep)
+
+	def clear(self):
+		""" Clears the screen
+		"""
+		if os.name == 'nt':
+			os.system('CLS')
+		if os.name == 'posix':
+			os.system('clear')
 
 	def get_piece(self):
 		 piece = random.randint(0, 1)
@@ -91,9 +105,14 @@ class Game:
 
 	def press_down(self):
 		self.curr_piece.move_down()
+		self.clear()
 		self.board.print_board(self.curr_piece)
 		if self.board.check_bottom(self.curr_piece):
 			self.curr_piece = Piece("I")
+
+	def run_ticks(self):
+		self.press_down()
+		self.tick_scheduler.enter(1, 1, self.run_ticks)
 
 
 def main(argv):
@@ -102,10 +121,17 @@ def main(argv):
 	game = Game()
 	game.board.print_board()
 
+	game.tick_scheduler.enter(1, 1, game.run_ticks)
+	game.tick_scheduler.run()
+
 	while True:
-		move = input()
-		if move == "k":
+		# s.run()
+		move = msvcrt.getch()
+		if move.lower() == b'k':
 			game.press_down()
+
+		if move.lower() == b'\x03':
+			break
 
 if __name__ == "__main__":
 	main(sys.argv)
