@@ -1,5 +1,5 @@
 import random
-from pieces import Piece
+import pieces
 
 class Board:
 
@@ -11,9 +11,8 @@ class Board:
 		self.curr_piece = self.get_random_piece()
 
 	def get_random_piece(self):
-		 piece = random.randint(0, 1)
 
-		 return Piece(self.possible_pieces[piece])
+		 return pieces.IPiece(0, 4)
 
 	def drop_curr(self):
 		while self.can_place_piece(self.curr_piece):
@@ -40,6 +39,9 @@ class Board:
 		if not self.can_place_piece(self.curr_piece):
 			self.curr_piece.move_left()
 
+	def rotate_curr_clock(self):
+		self.curr_piece.rotate_clockwise()
+
 	def check_tetris(self):
 		for col in range(self.width):
 			if self.board[self.height - 1][col] != "@":
@@ -56,16 +58,6 @@ class Board:
 
 		return True
 
-		# for point in piece.points:
-		# 	x = point[0]
-		# 	y = point[1]
-		# 	bottom = False
-		# 	if (x >= self.height or y < 0 
-		# 						 or y >= self.width 
-		# 						 or self.board[x][y] != '.'):
-		# 		return False
-
-		# return True
 
 	def clear_bottom(self):
 		for i in range(self.height - 1, 0, -1):
@@ -80,21 +72,10 @@ class Board:
 
 		return False
 
-		# for point in piece.points:
-		# 	x = point[0] + 1
-		# 	y = point[1]
-		# 	bottom = False
-		# 	if x >= self.height or self.board[x][y] != '.':
-		# 		self.update_board(piece)
-		# 		return True
-
-		# return False 
-
+	
 	def set_piece(self, piece):
 		for block in piece.blocks:
 			self.board[block.row][block.col] = "@"
-		# for point in piece.points:
-		# 		self.board[point[0]][point[1]] = '@'
 
 	def print_board(self):
 		temp = [row[:] for row in self.board]
@@ -110,14 +91,5 @@ class Board:
 						found = True
 				if not found:
 					row += temp[i][j] + " "
-
-				# for point in self.curr_piece.points:
-				# 	if point[0] == i and point[1] == j:
-				# 		row += "@ "
-				# 		found = True
-				# if not found:
-				# 	row += temp[i][j] + ' '
-
-
 				
 			print(row)

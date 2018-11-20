@@ -54,6 +54,9 @@ def main(argv):
 		if move == b' ':
 			game.board.drop_curr()
 
+		if move == b'x':
+			game.board.rotate_curr_clock()
+
 		if move.lower() == b'\x03':
 			break
 

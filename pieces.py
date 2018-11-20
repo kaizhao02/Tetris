@@ -1,3 +1,4 @@
+import random
 
 class Block:
 
@@ -7,44 +8,77 @@ class Block:
 
 class Piece:
 
-	def __init__(self, piece_type):
-		self.type = piece_type
+	def __init__(self, row, col):
+		self.row = row
+		self.col = col
 		self.blocks = [] 
-		self.init_points()
+		self.orientation = 0
+		self.update_blocks()
 
-	def init_points(self):
-		if self.type == "I":
-			self.blocks.extend([Block(0, 3), Block(1, 3), Block(2, 3), Block(3, 3)])
-			# self.points = [(0, 3), (1, 3), (2, 3), (3, 3)]
-		elif self.type == "T":
-			self.blocks.extend([Block(0, 2), Block(0, 3), Block(0, 4), Block(1, 3)])
-			# self.points = [(0, 2), (0, 3), (0, 4), (1, 3)]
+	def update_blocks(self):
+		self.blocks = []
+		for position in self.relative_block_positions[self.orientation]:
+			self.blocks.append(Block(position[0] + self.row, position[1] + self.col))
+
+	def get_random_orientation(self):
+		return random.randint(0, self.num_orientations - 1)
+
+	@property
+	def num_orientations(self):
+		raise NotImplementedError
+
+	@property
+	def relative_block_positions(self):
+		"""A dict of lists of the positions for each block in the Shape, for each orientation.
+
+		Note: These are *relative* positions as compared to the base position of the current Shape.
+		"""
+		raise NotImplementedError
+
+	def rotate(self, amount):
+		self.orientation = (self.orientation + amount) % self.num_orientations
+		self.update_blocks()
+
+	def rotate_clockwise(self):
+		self.rotate(1)
 
 	def move_down(self):
 		for block in self.blocks:
 			block.row += 1
-		# for i in range(len(self.points)):
-		# 	self.points[i] = (self.points[i][0] + 1, self.points[i][1])
-
+		
 	def move_up(self):
 		for block in self.blocks:
 			block.row -= 1
-		# for i in range(len(self.points)):
-		# 	self.points[i] = (self.points[i][0] - 1, self.points[i][1])
-
+		
 	def move_left(self):
 		for block in self.blocks:
 			block.col -= 1
-		# for i in range(len(self.points)):
-		# 	self.points[i] = (self.points[i][0], self.points[i][1] - 1)
-
+		
 	def move_right(self):
 		for block in self.blocks:
 			block.col += 1		
 
-		# for i in range(len(self.points)):
-		# 	self.points[i] = (self.points[i][0], self.points[i][1] + 1)
+class IPiece(Piece):
+	""" Orientation:  0           90
+        ======================================
+        Shape:      | 0*|   | 0 | 1*| 2 | 3 |
+                    | 1 |
+                    | 2 |
+                    | 3 |
+    """
 
+	@property
+	def num_orientations(self):
+		return 2
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 0), (1, 0), (2, 0), (3, 0)],
+			1: [(0, -1), (0, 0), (0, 1), (0, 2)],
+		}
+
+	
 	# def rotate(self):
 	# 	for i in range(len(self.points)):
 	# 		self.points[i] = (self.points[i][0] + 1, self.points[i][1])
