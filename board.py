@@ -8,11 +8,19 @@ class Board:
 		self.height = height
 		self.board = [['.'] * width for _ in range(height)]
 		self.possible_pieces = ["I", "T"]
+		self.possible_pieces = {
+			0 : pieces.IPiece,
+			1 : pieces.OPiece,
+			2 : pieces.LPiece,
+			3 : pieces.JPiece
+		}
 		self.curr_piece = self.get_random_piece()
 
 	def get_random_piece(self):
+		piece_num = random.randint(0, 3)		
+		piece = self.possible_pieces[piece_num]
 
-		 return pieces.IPiece(0, 4)
+		return piece(0, 4)
 
 	def drop_curr(self):
 		while self.can_place_piece(self.curr_piece):
@@ -41,6 +49,9 @@ class Board:
 
 	def rotate_curr_clock(self):
 		self.curr_piece.rotate_clockwise()
+
+	def rotate_curr_counter(self):
+		self.curr_piece.rotate_counterclockwise()
 
 	def check_tetris(self):
 		for col in range(self.width):

@@ -42,19 +42,26 @@ class Piece:
 	def rotate_clockwise(self):
 		self.rotate(1)
 
+	def rotate_counterclockwise(self):
+		self.rotate(-1)
+
 	def move_down(self):
+		self.row += 1
 		for block in self.blocks:
 			block.row += 1
 		
 	def move_up(self):
+		self.row -= 1
 		for block in self.blocks:
 			block.row -= 1
 		
 	def move_left(self):
+		self.col -= 1
 		for block in self.blocks:
 			block.col -= 1
 		
 	def move_right(self):
+		self.col += 1
 		for block in self.blocks:
 			block.col += 1		
 
@@ -76,6 +83,66 @@ class IPiece(Piece):
 		return {
 			0: [(0, 0), (1, 0), (2, 0), (3, 0)],
 			1: [(0, -1), (0, 0), (0, 1), (0, 2)],
+		}
+
+class OPiece(Piece):
+	""" Orientation:    0    
+        ========================
+        Shape:      | 0*|| 1 |  
+                    | 2 || 3 |
+                    
+    """
+
+	@property
+	def num_orientations(self):
+		return 1
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 0), (0, 1), (1, 0), (1, 1)],
+		}
+
+class LPiece(Piece):
+	""" Orientation:  0              90            180           270
+		====================================================================
+		Shape:      | 0*|             *         | 3 | 2*|         * | 3 |
+					| 1 |       | 2 | 1 | 0 |       | 1 |   | 0 | 1 | 2 |
+					| 2 | 3 |   | 3 |               | 0 |
+	"""
+
+	@property
+	def num_orientations(self):
+		return 4
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 0), (1, 0), (2, 0), (2, 1)],
+			1: [(1, 1), (1, 0), (1, -1), (2, -1)],
+			2: [(2, 0), (1, 0), (0, 0), (0, -1)],
+			3: [(1, -1), (1, 0), (1, 1), (0, 1)]
+		}
+
+class JPiece(Piece):
+	""" Orientation:  0              90            180                270
+		=========================================================================
+		Shape:      | 0*|       | 3 | *             | 2*| 3 |          *   
+					| 1 |       | 2 | 1 | 0 |       | 1 |        | 0 | 1 | 2 |
+				| 3	| 2 |                           | 0 |				 | 3 |	
+	"""
+
+	@property
+	def num_orientations(self):
+		return 4
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 0), (1, 0), (2, 0), (2, -1)],
+			1: [(1, 1), (1, 0), (1, -1), (0, -1)],
+			2: [(2, 0), (1, 0), (0, 0), (0, 1)],
+			3: [(1, -1), (1, 0), (1, 1), (2, 1)]
 		}
 
 	

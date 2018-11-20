@@ -13,6 +13,15 @@ class Game:
 	def __init__(self):
 		self.board = Board()
 		self.tick_scheduler =  sched.scheduler(time.time, time.sleep)
+		self.commands = {
+			b'P' : self.board.move_curr_down,
+			b'K' : self.board.move_curr_left,
+			b'M' : self.board.move_curr_right,
+			b' ' : self.board.drop_curr,
+			b'x' : self.board.rotate_curr_clock,
+			b'z' : self.board.rotate_curr_counter,
+			b'q' : sys.exit
+		}
 
 	def clear_screen(self):
 		""" Clears the screen
@@ -38,31 +47,34 @@ def main(argv):
 
 	while True:
 		# s.run()
-		move = msvcrt.getch()
+		command = msvcrt.getch()
 		# print(move)
 		
-
-		if move == b'P':
-			game.board.move_curr_down()
-
-		if move == b'K':
-			game.board.move_curr_left()
-
-		if move == b'M':
-			game.board.move_curr_right()
-
-		if move == b' ':
-			game.board.drop_curr()
-
-		if move == b'x':
-			game.board.rotate_curr_clock()
-
-		if move.lower() == b'\x03':
-			break
+		move = game.commands.get(command)
+		if move:
+			move()
 
 		game.clear_screen()
 		game.board.check_tetris()
 		game.board.print_board()
+
+	# print(".....@.....")
+	# print(".....@@...")
+	# print("......@...")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print("..........")
+	# print(".....a....")
+	# print(".....aa...")
+	# print("......a...")
 
 if __name__ == "__main__":
 	main(sys.argv)
