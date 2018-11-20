@@ -12,12 +12,15 @@ class Board:
 			0 : pieces.IPiece,
 			1 : pieces.OPiece,
 			2 : pieces.LPiece,
-			3 : pieces.JPiece
+			3 : pieces.JPiece,
+			4 : pieces.SPiece,
+			5 : pieces.ZPiece,
+			6 : pieces.TPiece
 		}
 		self.curr_piece = self.get_random_piece()
 
 	def get_random_piece(self):
-		piece_num = random.randint(0, 3)		
+		piece_num = random.randint(0, 6)		
 		piece = self.possible_pieces[piece_num]
 
 		return piece(0, 4)

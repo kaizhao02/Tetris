@@ -67,12 +67,12 @@ class Piece:
 
 class IPiece(Piece):
 	""" Orientation:  0           90
-        ======================================
-        Shape:      | 0*|   | 0 | 1*| 2 | 3 |
-                    | 1 |
-                    | 2 |
-                    | 3 |
-    """
+		======================================
+		Shape:      | 0*|   | 0 | 1*| 2 | 3 |
+					| 1 |
+					| 2 |
+					| 3 |
+	"""
 
 	@property
 	def num_orientations(self):
@@ -87,11 +87,11 @@ class IPiece(Piece):
 
 class OPiece(Piece):
 	""" Orientation:    0    
-        ========================
-        Shape:      | 0*|| 1 |  
-                    | 2 || 3 |
-                    
-    """
+		========================
+		Shape:      | 0*|| 1 |  
+					| 2 || 3 |
+					
+	"""
 
 	@property
 	def num_orientations(self):
@@ -129,7 +129,7 @@ class JPiece(Piece):
 		=========================================================================
 		Shape:      | 0*|       | 3 | *             | 2*| 3 |          *   
 					| 1 |       | 2 | 1 | 0 |       | 1 |        | 0 | 1 | 2 |
-				| 3	| 2 |                           | 0 |				 | 3 |	
+				| 3	| 2 |      	                     | 0 |				 | 3 |	
 	"""
 
 	@property
@@ -144,6 +144,89 @@ class JPiece(Piece):
 			2: [(2, 0), (1, 0), (0, 0), (0, 1)],
 			3: [(1, -1), (1, 0), (1, 1), (2, 1)]
 		}
+
+class JPiece(Piece):
+	""" Orientation:  0              90            180                270
+		=========================================================================
+		Shape:      | 0*|       | 3 | *             | 2*| 3 |          *   
+					| 1 |       | 2 | 1 | 0 |       | 1 |        | 0 | 1 | 2 |
+				| 3	| 2 |      	                     | 0 |				 | 3 |	
+	"""
+
+	@property
+	def num_orientations(self):
+		return 4
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 0), (1, 0), (2, 0), (2, -1)],
+			1: [(1, 1), (1, 0), (1, -1), (0, -1)],
+			2: [(2, 0), (1, 0), (0, 0), (0, 1)],
+			3: [(1, -1), (1, 0), (1, 1), (2, 1)]
+		}
+
+class SPiece(Piece):
+	""" Orientation:  0               90
+		=====================================
+		Shape:      | 0*|         * | 1 | 0 |
+					| 1 | 2 |   | 3 | 2 |
+						| 3 |
+	"""
+
+	@property
+	def num_orientations(self):
+		return 2
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 0), (1, 0), (1, 1), (2, 1)],
+			1: [(0, 2), (0, 1), (1, 1), (1, 0)]
+			
+		}
+
+class ZPiece(Piece):
+	""" Orientation:  0               90
+		=====================================
+		Shape:        * | 0 |   | 0 | 1*|
+					| 2 | 1 |       | 2 | 3 |
+					| 3 |
+	"""
+
+	@property
+	def num_orientations(self):
+		return 2
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 1), (1, 1), (1, 0), (2, 0)],
+			1: [(0, -1), (0, 0), (1, 0), (1, 1)]
+			
+		}
+
+class TPiece(Piece):
+	""" Orientation:    0           90              180               270
+		====================================================================
+		Shape:      * | 0 |      * | 1 |          *                 * | 1 |
+				  | 1 | 2 | 3 |    | 2 | 0 |    | 1 | 2 | 3 |     | 0 | 2 |
+								   | 3 |            | 0 |             | 3 |
+	"""
+
+	@property
+	def num_orientations(self):
+		return 4
+
+	@property
+	def relative_block_positions(self):
+		return {
+			0: [(0, 1), (1, 0), (1, 1), (1, 2)],
+			1: [(1, 2), (0, 1), (1, 1), (2, 1)],
+			2: [(2, 1), (1, 0), (1, 1), (1, 2)],
+			3: [(1, 0), (0, 1), (1, 1), (2, 1)]
+		}
+
 
 	
 	# def rotate(self):
