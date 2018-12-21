@@ -55,7 +55,7 @@ def main(argv):
 			move()
 
 		game.clear_screen()
-		game.board.check_tetris()
+		game.board.clear_completed_rows()
 		game.board.print_board()
 
 	# print(".....@.....")

@@ -56,13 +56,6 @@ class Board:
 	def rotate_curr_counter(self):
 		self.curr_piece.rotate_counterclockwise()
 
-	def check_tetris(self):
-		for col in range(self.width):
-			if self.board[self.height - 1][col] != "@":
-				return 
-
-		self.clear_bottom()
-
 	def can_place_piece(self, piece):
 		for block in piece.blocks:
 			if (block.row >= self.height or block.col < 0
@@ -71,25 +64,33 @@ class Board:
 				return False
 
 		return True
-
-
-	def clear_bottom(self):
-		for i in range(self.height - 1, 0, -1):
-			for j in range(self.width - 1, 0, -1):
-				self.board[i][j] = self.board[i - 1][j]
-
-	def check_bottom(self, piece):
-		for block in piece.blocks:
-			if block.row >= self.height or self.board[x][y] != ".":
-				self.set_piece(piece)
-				return True
-
-		return False
-
 	
 	def set_piece(self, piece):
 		for block in piece.blocks:
 			self.board[block.row][block.col] = "@"
+
+	def clear_completed_rows(self):
+		new_board = [['.'] * self.width for _ in range(self.height)]
+		curr_row = self.height - 1
+
+		for row in self.get_uncompleted_rows():
+			new_board[curr_row] = list(self.board[row])
+			curr_row -= 1
+
+		self.board = new_board
+
+	def get_uncompleted_rows(self):
+		uncompleted_rows = []
+
+		for row in range(self.height - 1, -1, -1):
+			for col in range(self.width):
+				if self.board[row][col] == '.':
+					uncompleted_rows.append(row)
+					break
+			
+		return uncompleted_rows
+
+
 
 	def print_board(self):
 		temp = [row[:] for row in self.board]
